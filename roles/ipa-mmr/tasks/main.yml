@@ -1,81 +1,16 @@
 ---
+
 - assert:
     that:
       - "ipa_type == 'replica' or ipa_type == 'firstborn'"
-    msg: "please only use allowed ipa_type:s "
+    msg: "Please only use allowed ipa_type:s"
 
-- name: install IPA pkgs (el7)
-  yum:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - ipa-server
-    - ipa-server-dns
-  when: ansible_distribution == "CentOS"
+- include: install.yml
 
-- name: install IPA pkgs (ubuntu)
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - freeipa-server
-    - freeipa-server-dns
-  when: ansible_distribution == "Ubuntu"
+- include: dns.yml
 
-- name: Add host entry
-  lineinfile:
-    dest: /etc/hosts
-    regexp: " {{ ansible_hostname }}"
-    line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}"
-    owner: root
-    group: root
-    mode: 0644
-
-- name: install IPA server
-  shell: ipa-server-install -p {{ ds_admin_password|quote }} -n {{ domain_name|quote }} -r {{ realm_name|quote|upper }} -a {{ ipa_admin_password|quote }} --hostname={{ ansible_fqdn|quote }} --setup-dns --auto-forwarders --auto-reverse -U
-  args:
-    creates: /var/lib/pki/pki-tomcat/
+- include: firstborn.yml
   when: ipa_type == "firstborn"
 
-
-- name: collect root CA on master
-  register: root_ca
-  shell: cat /etc/ipa/ca.crt
-  when: ipa_type == 'replica'
-  delegate_to: "{{ ipa_supplier }}"
-
-- name: collect ipaddress on master
-  register: firstborn_default_ip
-  shell: "/bin/echo {{ ansible_default_ipv4.address }}"
-  when: ipa_type == 'replica'
-  delegate_to: "{{ ipa_supplier }}"
-
-- name: store root ca on supplier
-  shell: "echo '{{ root_ca.stdout }}' > /etc/ipa/ca.crt"
-  args:
-    creates: /etc/ipa/ca.crt
-  when: ipa_type == 'replica'
-
-- name: disable systemd-resolved
-  service:
-    name: systemd-resolved
-    enabled: no
-    state: stopped
-
-- name: fix resolver on supplier
-  shell: "echo '{{ firstborn_default_ip.stdout }}' > /etc/resolv.conf"
-  args:
-    creates: /etc/krb5.keytab
-  when: ipa_type == 'replica'
-
-- name: join ipa-server
-  shell: "ipa-client-install --domain={{ domain_name }}  --realm={{ realm_name|quote|upper }} -p admin -w {{ ipa_admin_password }} --enable-dns-updates --ip-address={{ ansible_default_ipv4.address }} -U"
-  args:
-    creates: /etc/krb5.keytab
-  when: ipa_type == 'replica'
-
-- name: install ipa-replica
-  shell: ipa-replica-install --setup-dns --auto-forwarders --auto-reverse -P admin -w {{ ipa_admin_password|quote }}  -U
-  args:
-    creates: "/var/lib/dirsrv/slapd-{{ realm_name|quote|upper| regex_replace('\\.', '-') }}"
+- include: replica.yml
   when: ipa_type == "replica"

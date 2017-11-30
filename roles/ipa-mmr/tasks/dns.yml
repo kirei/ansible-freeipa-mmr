@@ -1,0 +1,16 @@
+---
+
+- name: Add host entry
+  lineinfile:
+    dest: /etc/hosts
+    regexp: " {{ ansible_hostname }}"
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: disable systemd-resolved
+  service:
+    name: systemd-resolved
+    enabled: no
+    state: stopped

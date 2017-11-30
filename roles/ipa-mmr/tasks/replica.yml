@@ -1,0 +1,31 @@
+---
+
+- name: collect root CA on master
+  register: root_ca
+  shell: cat /etc/ipa/ca.crt
+  delegate_to: "{{ ipa_supplier }}"
+
+- name: collect IP address on master
+  register: firstborn_default_ip
+  shell: "/bin/echo {{ ansible_default_ipv4.address }}"
+  delegate_to: "{{ ipa_supplier }}"
+
+- name: store root CA on supplier
+  shell: "echo '{{ root_ca.stdout }}' > /etc/ipa/ca.crt"
+  args:
+    creates: /etc/ipa/ca.crt
+
+- name: fix resolver on supplier
+  shell: "echo '{{ firstborn_default_ip.stdout }}' > /etc/resolv.conf"
+  args:
+    creates: /etc/krb5.keytab
+
+- name: join IPA server
+  shell: "ipa-client-install --domain={{ domain_name }}  --realm={{ realm_name|quote|upper }} -p admin -w {{ ipa_admin_password }} --enable-dns-updates --ip-address={{ ansible_default_ipv4.address }} -U"
+  args:
+    creates: /etc/krb5.keytab
+
+- name: install IPA replica
+  shell: ipa-replica-install --setup-dns --auto-forwarders --auto-reverse -P admin -w {{ ipa_admin_password|quote }}  -U
+  args:
+    creates: "/var/lib/dirsrv/slapd-{{ realm_name|quote|upper| regex_replace('\\.', '-') }}"
