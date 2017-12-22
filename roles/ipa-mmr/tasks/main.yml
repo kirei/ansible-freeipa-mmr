@@ -5,12 +5,12 @@
       - "ipa_type == 'replica' or ipa_type == 'firstborn'"
     msg: "Please only use allowed ipa_type:s"
 
-- include: install.yml
+- include_tasks: install.yml
 
-- include: dns.yml
+- include_tasks: dns.yml
 
-- include: firstborn.yml
+- include_tasks: firstborn.yml
   when: ipa_type == "firstborn"
 
-- include: replica.yml
+- include_tasks: replica.yml
   when: ipa_type == "replica"
