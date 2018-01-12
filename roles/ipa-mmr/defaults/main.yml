@@ -3,8 +3,10 @@ domain_name: example.com
 realm_name: example.com
 ds_admin_password: mekmitasdigoat
 ipa_admin_password: mekmitasdigoat
-hostname: ipa1.example.com
-auto_reverse: true
-auto_forwarders: true
-ipa_type: replica
-ipa_supplier: ipa1.example.com
+
+# for FIRST server
+ipa_type: firstborn
+
+# for OTHER servers
+#ipa_type: replica
+#ipa_supplier: ipa1.example.com
