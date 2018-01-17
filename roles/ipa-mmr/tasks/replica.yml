@@ -21,7 +21,7 @@
     creates: /etc/krb5.keytab
 
 - name: join IPA server
-  shell: "ipa-client-install --domain={{ domain_name }}  --realm={{ realm_name|quote|upper }} -p admin -w {{ ipa_admin_password }} --enable-dns-updates --ip-address={{ ansible_default_ipv4.address }} -U"
+  shell: "ipa-client-install --domain={{ domain_name }}  --realm={{ realm_name|quote|upper }} -p admin -w {{ ipa_admin_password }} --enable-dns-updates -U"
   args:
     creates: /etc/krb5.keytab
 
