@@ -1,0 +1,6 @@
+ipa1.example.com
+ipa2.example.com
+
+[ipa_servers]
+ipa1.example.com
+ipa2.example.com
