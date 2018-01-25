@@ -5,7 +5,7 @@ ipa2.example.com
 ipa1.example.com
 ipa2.example.com
 
-[ipa_first]
+[ipa_supplier]
 ipa1.example.com
 
 [ipa_replicas]
