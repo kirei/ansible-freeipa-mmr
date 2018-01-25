@@ -5,20 +5,15 @@
   shell: cat /etc/ipa/ca.crt
   delegate_to: "{{ ipa_supplier }}"
 
-- name: collect IP address on master
-  register: firstborn_default_ip
-  shell: "/bin/echo {{ ansible_default_ipv4.address }}"
-  delegate_to: "{{ ipa_supplier }}"
-
 - name: store root CA on supplier
-  shell: "echo '{{ root_ca.stdout }}' > /etc/ipa/ca.crt"
-  args:
-    creates: /etc/ipa/ca.crt
+  copy:
+    content: "{{ root_ca.stdout }}"
+    dest: /etc/ipa/ca.crt
 
-- name: fix resolver on supplier
-  shell: "echo '{{ firstborn_default_ip.stdout }}' > /etc/resolv.conf"
-  args:
-    creates: /etc/krb5.keytab
+- name: configure supplier as resolver
+  copy:
+    content: "nameserver {{ hostvars[ipa_supplier]['ansible_default_ipv4']['address'] }}\n"
+    dest: /etc/resolv.conf
 
 - name: join IPA server
   shell: "ipa-client-install --domain={{ domain_name }}  --realm={{ realm_name|quote|upper }} -p admin -w {{ ipa_admin_password }} --enable-dns-updates -U"
