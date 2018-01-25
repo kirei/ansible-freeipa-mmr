@@ -1,6 +1,6 @@
 ---
 
-- name: install IPA server
+- name: install and configure IPA server
   shell: ipa-server-install -p {{ ds_admin_password|quote }} -n {{ domain_name|quote }} -r {{ realm_name|quote|upper }} -a {{ ipa_admin_password|quote }} --hostname={{ ansible_fqdn|quote }} --setup-dns --auto-forwarders --auto-reverse -U
   args:
     creates: /var/lib/pki/pki-tomcat/
