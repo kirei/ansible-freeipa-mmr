@@ -1,5 +1,10 @@
 ---
 
+- assert:
+    that:
+      - "{{ 'ansible_default_ipv4' in hostvars[ipa_supplier] }}"
+    msg: "Facts for IPA supplier not collected"
+
 - name: collect root CA on master
   register: root_ca
   shell: cat /etc/ipa/ca.crt
