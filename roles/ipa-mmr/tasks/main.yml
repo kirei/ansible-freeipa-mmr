@@ -7,10 +7,19 @@
 
 - include_tasks: install.yml
 
-- include_tasks: dns.yml
+- name: Add host entry
+  lineinfile:
+    dest: /etc/hosts
+    regexp: " {{ ansible_hostname }}"
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}"
+    owner: root
+    group: root
+    mode: 0644
 
 - include_tasks: firstborn.yml
   when: ipa_type == "firstborn"
 
 - include_tasks: replica.yml
   when: ipa_type == "replica"
+
+- include_tasks: cleanup.yml
