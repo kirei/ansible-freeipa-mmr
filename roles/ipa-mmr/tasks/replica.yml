@@ -26,6 +26,6 @@
     creates: /etc/krb5.keytab
 
 - name: install and configure IPA replica
-  shell: ipa-replica-install --setup-dns --auto-forwarders --auto-reverse -P admin -w {{ ipa_admin_password|quote }}  -U
+  shell: ipa-replica-install --setup-dns --no-forwarders --auto-reverse -P admin -w {{ ipa_admin_password|quote }}  -U
   args:
     creates: "/var/lib/dirsrv/slapd-{{ realm_name|quote|upper| regex_replace('\\.', '-') }}"
