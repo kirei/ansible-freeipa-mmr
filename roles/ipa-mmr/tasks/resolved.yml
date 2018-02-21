@@ -1,0 +1,13 @@
+---
+
+- name: check if we have the systemd resolver
+  register: has_systemd_resolved
+  ignore_errors: True
+  shell: systemctl status systemd-resolved
+
+- name: disable systemd-resolved
+  service:
+    name: systemd-resolved
+    enabled: no
+    state: stopped
+  when: has_systemd_resolved.rc == 0
