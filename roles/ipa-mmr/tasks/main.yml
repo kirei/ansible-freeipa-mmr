@@ -7,7 +7,7 @@
 
 - include_tasks: install.yml
 
-- name: Add host entry
+- name: Add host entry for self
   lineinfile:
     dest: /etc/hosts
     regexp: " {{ ansible_hostname }}"
