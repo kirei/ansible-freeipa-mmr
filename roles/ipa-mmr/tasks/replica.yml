@@ -1,6 +1,6 @@
 ---
 
 - name: install and configure IPA replica
-  shell: ipa-replica-install --setup-dns --no-forwarders --auto-reverse -P admin -w {{ ipa_admin_password|quote }} --unattended
+  shell: ipa-replica-install --setup-dns {{ '--setup-ca' if ipa_ca is defined and ipa_ca else '' }} --no-forwarders --auto-reverse -P admin -w {{ ipa_admin_password|quote }} --unattended
   args:
     creates: "/var/lib/dirsrv/slapd-{{ realm_name|quote|upper| regex_replace('\\.', '-') }}"

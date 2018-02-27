@@ -3,6 +3,7 @@ domain_name: example.com
 realm_name: example.com
 ds_admin_password: mekmitasdigoat
 ipa_admin_password: mekmitasdigoat
+ipa_ca: True
 
 # for FIRST server
 ipa_type: firstborn
