@@ -15,6 +15,7 @@
     content: "{{ root_ca.stdout }}"
     dest: /etc/ipa/ca.crt
 
+# we must use the supplier as resolver in case the domain is not yet delegated
 - name: configure supplier as resolver
   copy:
     content: "nameserver {{ hostvars[ipa_supplier]['ansible_default_ipv4']['address'] }}\n"
