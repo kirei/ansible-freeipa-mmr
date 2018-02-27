@@ -19,6 +19,12 @@
 - include_tasks: firstborn.yml
   when: ipa_type == "firstborn"
 
+- stat: path="/etc/krb5.keytab"
+  register: keytab
+
+- include_tasks: client.yml
+  when: ipa_type == "replica" and not keytab.stat.exists
+
 - include_tasks: replica.yml
   when: ipa_type == "replica"
 
