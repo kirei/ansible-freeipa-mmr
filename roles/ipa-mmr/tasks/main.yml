@@ -10,7 +10,7 @@
 - name: Add host entry for self
   lineinfile:
     dest: /etc/hosts
-    regexp: " {{ ansible_hostname }}"
+    regexp: '\s{{ ansible_hostname }}'
     line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}"
     owner: root
     group: root
