@@ -4,8 +4,14 @@ realm_name: example.com
 ds_admin_password: mekmitasdigoat
 ipa_admin_password: mekmitasdigoat
 ipa_ca: True
-ipa_reverse_zones: []
-#ipa_bootstrap_resolvers: []
+
+#ipa_reverse_zones:
+#  - 1.168.192.in-addr.arpa
+#  - 2.168.192.in-addr.arpa
+
+#ipa_bootstrap_resolvers:
+#  - 8.8.8.8
+#  - 8.8.4.4
 
 # for FIRST server
 ipa_type: firstborn

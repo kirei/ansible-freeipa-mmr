@@ -9,6 +9,10 @@
       --setup-dns \
       {{ '--setup-ca' if ipa_ca is defined and ipa_ca else '' }} \
       --no-forwarders \
+      {% if ipa_reverse_zones is defined -%}
+      {% for zone in ipa_reverse_zones %}--reverse-zone={{zone}} {% endfor %}
+      {% else -%}
       --auto-reverse
+      {% endif -%}
   args:
     creates: "/var/lib/dirsrv/slapd-{{ realm_name|quote|upper| regex_replace('\\.', '-') }}"

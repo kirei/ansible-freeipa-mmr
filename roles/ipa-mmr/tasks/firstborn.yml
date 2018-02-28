@@ -1,6 +1,6 @@
 ---
 
-- name: configure bootstrap resolver
+- name: configure bootstrap resolvers
   copy:
     content: |
       {% for server in ipa_bootstrap_resolvers -%}
@@ -20,7 +20,15 @@
       --hostname={{ ansible_fqdn|quote }} \
       --setup-dns \
       --no-forwarders \
-      --auto-reverse \
+      {% if ipa_reverse_zones is defined -%}
       {% for zone in ipa_reverse_zones %}--reverse-zone={{zone}} {% endfor %}
+      {% else -%}
+      --auto-reverse
+      {% endif -%}
   args:
     creates: /var/lib/pki/pki-tomcat
+
+- name: configure self as resolver
+  copy:
+    content: nameserver 127.0.0.1
+    dest: /etc/resolv.conf
