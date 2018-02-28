@@ -1,6 +1,26 @@
 ---
 
+- name: configure bootstrap resolver
+  copy:
+    content: |
+      {% for server in ipa_bootstrap_resolvers -%}
+      nameserver {{server}}
+      {% endfor -%}
+    dest: /etc/resolv.conf
+  when: ipa_bootstrap_resolvers is defined
+
 - name: install and configure IPA server
-  shell: ipa-server-install -p {{ ds_admin_password|quote }} -n {{ domain_name|quote }} -r {{ realm_name|quote|upper }} -a {{ ipa_admin_password|quote }} --hostname={{ ansible_fqdn|quote }} --setup-dns --no-forwarders --auto-reverse --unattended
+  shell: |
+    ipa-server-install \
+      --unattended \
+      --domain={{ domain_name|quote }} \
+      --realm={{ realm_name|quote|upper }} \
+      --admin-password={{ ipa_admin_password|quote }} \
+      --ds-password={{ ds_admin_password|quote }} \
+      --hostname={{ ansible_fqdn|quote }} \
+      --setup-dns \
+      --no-forwarders \
+      --auto-reverse \
+      {% for zone in ipa_reverse_zones %}--reverse-zone={{zone}} {% endfor %}
   args:
-    creates: /var/lib/pki/pki-tomcat/
+    creates: /var/lib/pki/pki-tomcat
