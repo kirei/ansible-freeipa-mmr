@@ -22,6 +22,13 @@
     dest: /etc/resolv.conf
 
 - name: join IPA server
-  shell: "ipa-client-install --domain={{ domain_name }}  --realm={{ realm_name|quote|upper }} -p admin -w {{ ipa_admin_password }} --enable-dns-updates -U"
+  shell: |
+    ipa-client-install \
+      --unattended \
+      --domain={{ domain_name }} \
+      --realm={{ realm_name|quote|upper }} \
+      --principal=admin \
+      --password={{ ipa_admin_password }} \
+      --enable-dns-updates
   args:
     creates: /etc/krb5.keytab
