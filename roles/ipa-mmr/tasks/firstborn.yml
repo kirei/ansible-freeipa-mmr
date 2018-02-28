@@ -30,5 +30,5 @@
 
 - name: configure self as resolver
   copy:
-    content: nameserver 127.0.0.1
+    content: "nameserver 127.0.0.1\n"
     dest: /etc/resolv.conf
