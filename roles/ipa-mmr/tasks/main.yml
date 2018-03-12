@@ -1,11 +1,14 @@
 ---
 
 - assert:
-    that:
-      - "ipa_type == 'replica' or ipa_type == 'firstborn'"
+    that: "ipa_type == 'replica' or ipa_type == 'firstborn'"
     msg: "Please only use allowed ipa_type:s"
 
 - include_tasks: install.yml
+
+- assert:
+    that: ansible_fqdn | match(".+\\..+")
+    msg: "Hostname (ansible_fqdn) not FQDN, /etc/hosts not correct?"
 
 - name: Add host entry for self
   lineinfile:
