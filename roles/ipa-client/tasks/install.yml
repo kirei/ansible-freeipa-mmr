@@ -1,0 +1,17 @@
+---
+
+- name: install IPA packages (CentOS)
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - ipa-client
+  when: ansible_distribution == "CentOS"
+
+- name: install IPA packages (Ubuntu)
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - freeipa-client
+  when: ansible_distribution == "Ubuntu"

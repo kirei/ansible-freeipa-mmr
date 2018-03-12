@@ -1,0 +1,34 @@
+---
+
+- assert:
+    that:
+      - "{{ 'ansible_default_ipv4' in hostvars[ipa_supplier] }}"
+    msg: "Facts for IPA supplier not collected"
+
+- name: collect root CA from supplier
+  register: root_ca
+  shell: cat /etc/ipa/ca.crt
+  delegate_to: "{{ ipa_supplier }}"
+
+- name: store root CA
+  copy:
+    content: "{{ root_ca.stdout }}"
+    dest: /etc/ipa/ca.crt
+
+# we must use the supplier as resolver in case the domain is not yet delegated
+- name: configure supplier as resolver
+  copy:
+    content: "nameserver {{ hostvars[ipa_supplier]['ansible_default_ipv4']['address'] }}\n"
+    dest: /etc/resolv.conf
+
+- name: join IPA server
+  shell: |
+    ipa-client-install \
+      --unattended \
+      --domain={{ domain_name }} \
+      --realm={{ realm_name|quote|upper }} \
+      --principal=admin \
+      --password={{ ipa_admin_password }} \
+      --enable-dns-updates
+  args:
+    creates: /etc/krb5.keytab
