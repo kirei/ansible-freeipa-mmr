@@ -1,6 +1,6 @@
 ---
 
-- hosts: ipa1.test.fuketsu.se
+- hosts: all
   become: True
   become_user: root
   roles:
