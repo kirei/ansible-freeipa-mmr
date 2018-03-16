@@ -1,10 +1,10 @@
 ---
 
-- hosts: servers
-  name: Gather facts from all hosts
+- hosts: ipa1
+  name: Gather facts
   tasks: []
 
-- hosts: ipa3.test.fuketsu.se
+- hosts: ipa3
   become: True
   become_user: root
   roles:

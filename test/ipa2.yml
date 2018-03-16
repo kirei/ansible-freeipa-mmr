@@ -1,5 +1,10 @@
 ---
-- hosts: all
+
+- hosts: ipa1
+  name: Gather facts
+  tasks: []
+
+- hosts: ipa2
   become: True
   become_user: root
   roles:
