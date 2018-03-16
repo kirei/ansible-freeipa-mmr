@@ -8,8 +8,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.hostname = "ipa1.test.fuketsu.se"
     config.vm.network "private_network", ip: "192.168.33.11"
     config.vm.provision "shell", inline: <<-SHELL
-      apt update
-      apt install python -y
+      apt-get update
+      apt-get install -y python
     SHELL
   
     config.vm.provision :ansible do |ansible|
@@ -32,8 +32,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.hostname = "ipa2.test.fuketsu.se"
     config.vm.network "private_network", ip: "192.168.33.12"
     config.vm.provision "shell", inline: <<-SHELL
-      apt update
-      apt install python -y
+      apt-get update
+      apt-get install -y python
     SHELL
  
     config.vm.provision :ansible do |ansible|
