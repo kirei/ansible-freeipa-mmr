@@ -1,0 +1,11 @@
+---
+
+- hosts: servers
+  name: Gather facts from all hosts
+  tasks: []
+
+- hosts: ipa2.test.fuketsu.se
+  become: True
+  become_user: root
+  roles:
+    - { role: ipa-mmr }

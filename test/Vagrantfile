@@ -1,0 +1,21 @@
+VAGRANTFILE_API_VERSION = "2"
+VAGRANT_IMAGE = "bento/ubuntu-17.10"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = VAGRANT_IMAGE
+  
+  config.vm.define "ipa1", primary: true do |web|
+    config.vm.hostname = "ipa1.test.fuketsu.se"
+    config.vm.network "private_network", ip: "192.168.33.11"
+  end
+
+  config.vm.define "ipa2" do |db|
+    config.vm.hostname = "ipa2.test.fuketsu.se"
+    config.vm.network "private_network", ip: "192.168.33.12"
+  end
+
+  config.vm.define "ipa3" do |db|
+    config.vm.hostname = "ipa3.test.fuketsu.se"
+    config.vm.network "private_network", ip: "192.168.33.13"
+  end
+end

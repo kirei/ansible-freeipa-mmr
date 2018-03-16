@@ -1,0 +1,7 @@
+---
+
+- hosts: ipa1.test.fuketsu.se
+  become: True
+  become_user: root
+  roles:
+    - { role: ipa-mmr }
