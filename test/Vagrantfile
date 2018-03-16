@@ -34,7 +34,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision "shell", inline: <<-SHELL
       apt update
       apt install python -y
-      /usr/bin/printf '192.168.33.11 ipa1.test.fuketsu.se\n' >> /etc/hosts
     SHELL
  
     config.vm.provision :ansible do |ansible|
