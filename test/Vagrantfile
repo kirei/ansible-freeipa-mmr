@@ -76,6 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "ansible_domain" => "test.fuketsu.se",
       }
       ansible.groups = {
+        "servers" => ["ipa1","ipa2"],
         "clients" => ["ipa3"],
         "clients:vars" => ANSIBLE_GLOBAL_VARS,
       }
