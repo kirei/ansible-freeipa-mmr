@@ -12,7 +12,7 @@ ANSIBLE_GLOBAL_VARS = {
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = VAGRANT_IMAGE
-  
+
   config.vm.define "ipa1" do |vm_config|
     vm_config.vm.provision "shell", inline: <<-SHELL
       hostnamectl set-hostname ipa1.test.fuketsu.se
