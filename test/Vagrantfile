@@ -7,7 +7,6 @@ ANSIBLE_GLOBAL_VARS = {
    "ds_admin_password"       => "mekmitasdigoat1234",
    "ipa_admin_password"      => "mekmitasdigoat5678",
    "ipa_supplier"            => "ipa1",
-   "ipa_reverse_zones"       => ["27.16.172.in-addr.arpa"],
    "ipa_bootstrap_resolvers" => [ "8.8.8.8", "8.8.4.4"],
 }
 
@@ -29,6 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "ansible_fqdn" => "ipa1.test.fuketsu.se",
         "ansible_domain" => "test.fuketsu.se",
         "ipa_type" => "firstborn",
+        "ipa_reverse_zones" => ["27.16.172.in-addr.arpa"],
       }
       ansible.groups = {
         "servers" => ["ipa1"],
