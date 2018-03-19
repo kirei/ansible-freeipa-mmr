@@ -2,12 +2,13 @@ VAGRANTFILE_API_VERSION = "2"
 VAGRANT_IMAGE = "generic/ubuntu1710"
 
 ANSIBLE_GLOBAL_VARS = {
-   "domain_name"        => "test.fuketsu.se",
-   "realm_name"         => "test.fuketsu.se",
-   "ds_admin_password"  => "mekmitasdigoat1234",
-   "ipa_admin_password" => "mekmitasdigoat5678",
-   "ipa_supplier"       => "ipa1",
-   "ipa_reverse_zones"  => ["27.16.172.in-addr.arpa"],
+   "domain_name"             => "test.fuketsu.se",
+   "realm_name"              => "test.fuketsu.se",
+   "ds_admin_password"       => "mekmitasdigoat1234",
+   "ipa_admin_password"      => "mekmitasdigoat5678",
+   "ipa_supplier"            => "ipa1",
+   "ipa_reverse_zones"       => ["27.16.172.in-addr.arpa"],
+   "ipa_bootstrap_resolvers" => [ "8.8.8.8", "8.8.4.4"],
 }
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
