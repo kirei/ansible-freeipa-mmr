@@ -1,0 +1,10 @@
+ipa1.test.fuketsu.se
+ipa2.test.fuketsu.se
+ipa3.test.fuketsu.se
+
+[servers]
+ipa1.test.fuketsu.se
+ipa2.test.fuketsu.se
+
+[clients]
+ipa3.test.fuketsu.se

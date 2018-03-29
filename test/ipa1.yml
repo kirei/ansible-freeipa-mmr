@@ -1,0 +1,7 @@
+---
+
+- hosts: ipa1
+  become: True
+  become_user: root
+  roles:
+    - { role: ipa-mmr }

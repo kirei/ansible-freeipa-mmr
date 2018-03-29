@@ -1,0 +1,11 @@
+---
+
+- hosts: ipa1
+  name: Gather facts
+  tasks: []
+
+- hosts: ipa3
+  become: True
+  become_user: root
+  roles:
+    - { role: ipa-client }

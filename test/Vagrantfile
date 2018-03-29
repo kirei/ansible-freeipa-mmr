@@ -1,0 +1,86 @@
+VAGRANTFILE_API_VERSION = "2"
+VAGRANT_IMAGE = "generic/ubuntu1710"
+
+ANSIBLE_GLOBAL_VARS = {
+   "domain_name"             => "test.fuketsu.se",
+   "realm_name"              => "test.fuketsu.se",
+   "ds_admin_password"       => "mekmitasdigoat1234",
+   "ipa_admin_password"      => "mekmitasdigoat5678",
+   "ipa_supplier"            => "ipa1",
+   "ipa_bootstrap_resolvers" => [ "8.8.8.8", "8.8.4.4"],
+}
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = VAGRANT_IMAGE
+
+  config.vm.define "ipa1" do |vm_config|
+    vm_config.vm.provision "shell", inline: <<-SHELL
+      hostnamectl set-hostname ipa1.test.fuketsu.se
+      apt-get update
+      apt-get install -y python
+    SHELL
+
+    vm_config.vm.provision :ansible do |ansible|
+      ansible.playbook = "./ipa1.yml"
+      ansible.raw_arguments = ["--become"]
+      ansible.limit = "all"
+      ansible.extra_vars = {
+        "ansible_fqdn" => "ipa1.test.fuketsu.se",
+        "ansible_domain" => "test.fuketsu.se",
+        "ipa_type" => "firstborn",
+        "ipa_reverse_zones" => ["27.16.172.in-addr.arpa"],
+      }
+      ansible.groups = {
+        "servers" => ["ipa1"],
+        "servers:vars" => ANSIBLE_GLOBAL_VARS,
+      }
+    end
+  end
+
+  config.vm.define "ipa2" do |vm_config|
+    vm_config.vm.provision "shell", inline: <<-SHELL
+      hostnamectl set-hostname ipa2.test.fuketsu.se
+      apt-get update
+      apt-get install -y python
+    SHELL
+
+    vm_config.vm.provision :ansible do |ansible|
+      ansible.playbook = "./ipa2.yml"
+      ansible.raw_arguments = ["--become"]
+      ansible.limit = "all"
+      ansible.extra_vars = {
+        "ansible_fqdn" => "ipa2.test.fuketsu.se",
+        "ansible_domain" => "test.fuketsu.se",
+        "ipa_type" => "replica",
+      }
+      ansible.groups = {
+        "servers" => ["ipa1","ipa2"],
+        "servers:vars" => ANSIBLE_GLOBAL_VARS,
+      }
+    end
+  end
+
+  config.vm.define "ipa3" do |vm_config|
+    vm_config.vm.provision "shell", inline: <<-SHELL
+      hostnamectl set-hostname ipa3.test.fuketsu.se
+      apt-get update
+      apt-get install -y python
+    SHELL
+
+    vm_config.vm.provision :ansible do |ansible|
+      ansible.playbook = "./ipa3.yml"
+      ansible.raw_arguments = ["--become"]
+      ansible.limit = "all"
+      ansible.extra_vars = {
+        "ansible_fqdn" => "ipa3.test.fuketsu.se",
+        "ansible_domain" => "test.fuketsu.se",
+      }
+      ansible.groups = {
+        "servers" => ["ipa1","ipa2"],
+        "clients" => ["ipa3"],
+        "clients:vars" => ANSIBLE_GLOBAL_VARS,
+      }
+    end
+  end
+
+end
