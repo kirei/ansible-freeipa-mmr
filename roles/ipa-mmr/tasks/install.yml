@@ -17,3 +17,9 @@
     - freeipa-server
     - freeipa-server-dns
   when: ansible_distribution == "Ubuntu"
+
+- name: Install replication check script
+  template: src="ipa-replica-check.sh" dest="/root/ipa-replica-check" mode=544
+
+- name: Install replication test script
+  template: src="ipa-replica-test.sh" dest="/root/ipa-replica-test" mode=544
