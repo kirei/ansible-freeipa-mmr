@@ -25,4 +25,7 @@ if [ ${{ '{#' }}servers[@]} -eq 2 ]; then
 	cookie=`date +"%Y-%m-%d %H:%M:%S"`
 	cross_check ${servers[0]} ${servers[1]} "${cookie},server1,server2"
 	cross_check ${servers[1]} ${servers[0]} "${cookie},server2,server1"
+else
+	echo "Need exactly two servers to cross-check"
+	exit 1
 fi
