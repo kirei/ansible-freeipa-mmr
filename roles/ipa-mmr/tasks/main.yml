@@ -8,7 +8,7 @@
 
 - assert:
     that: ansible_fqdn | match(".+\\..+")
-    msg: "Hostname (ansible_fqdn) not FQDN, /etc/hosts not correct?"
+    msg: "Hostname ({{ansible_fqdn}}) not FQDN, /etc/hosts not correct?"
 
 - name: Add host entry for self
   lineinfile:
